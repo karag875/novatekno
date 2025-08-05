@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexvivo - Akıllı Ev Ürünleri</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom right, #fdfbfb, #ebedee);
+    }
+    header {
+      background: linear-gradient(to right, #FF512F, #DD2476);
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    nav {
+      background: linear-gradient(to right, #36D1DC, #5B86E5);
+      padding: 1rem;
+      text-align: center;
+    }
+    nav a, nav button {
+      color: white;
+      margin: 0 1rem;
+      text-decoration: none;
+      background: none;
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .products {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 2rem;
+      gap: 2rem;
+    }
+    .product {
+      background: linear-gradient(to top right, #ffffff, #fff7e6);
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 1rem;
+      width: 280px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+    .product:hover {
+      transform: scale(1.03);
+    }
+    .product img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+    .product h3 {
+      margin-top: 0.75rem;
+      font-size: 1.2rem;
+      color: #333;
+    }
+    .product p {
+      font-size: 0.95rem;
+      color: #555;
+    }
+    .product strong {
+      display: block;
+      margin: 0.75rem 0;
+      font-size: 1.1rem;
+      color: #000;
+    }
+    .product button {
+      background: linear-gradient(to right, #FF6F00, #FFA000);
+      color: white;
+      border: none;
+      padding: 0.6rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .form-section, .login-section, .cart-section, .footer {
+      max-width: 500px;
+      margin: 2rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .form-section button, .login-section button {
+      background: linear-gradient(to right, #FF6F00, #FFA000);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 5px;
+      width: 100%;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    footer {
+      background: linear-gradient(to right, #FF6F00, #FFA000);
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+      box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
+    }
+      nav a:hover, nav button:hover {
+      text-decoration: underline;
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+    }
+
+    @media (max-width: 768px) {
+      header div {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      nav {
+        text-align: center;
+      }
+      .products {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    body.night-mode {
+      background: #121212;
+      color: #f0f0f0;
+    }
+    body.night-mode header,
+    body.night-mode nav,
+    body.night-mode footer {
+      background: #1e1e1e;
+    }
+    body.night-mode .form-section,
+    body.night-mode .product {
+      background: #1e1e1e;
+      color: #f0f0f0;
+      border-color: #333;
+    }
+    .theme-toggle {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background: #333;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" onclick="toggleTheme()">🌗 Tema</button>
+  <header>
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+      <div>
+        <h1>Nexvivo</h1>
+        <p>Akıllı Yaşamın Yeni Adı</p>
+      </div>
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <form onsubmit="return registerUser(event)" style="display: flex; gap: 0.5rem; align-items: center;">
+          <input type="text" placeholder="Yeni Kullanıcı" required style="padding: 0.3rem; border-radius: 4px; border: none;">
+          <input type="password" placeholder="Yeni Şifre" required style="padding: 0.3rem; border-radius: 4px; border: none;">
+          <button type="submit" style="padding: 0.4rem 1rem; background-color: white; color: #FF6F00; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">Üye Ol</button>
+        </form>
+        <form onsubmit="return loginUser(event)" style="display: flex; gap: 0.5rem; align-items: center;">
+          <input type="text" placeholder="Kullanıcı Adı" required style="padding: 0.3rem; border-radius: 4px; border: none;">
+          <input type="password" placeholder="Şifre" required style="padding: 0.3rem; border-radius: 4px; border: none;">
+          <button type="submit" style="padding: 0.4rem 1rem; background-color: white; color: #FF6F00; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">Giriş</button>
+        </form>
+        <button onclick="document.getElementById('sepetPaneli').scrollIntoView({ behavior: 'smooth' });" style="padding: 0.4rem 1rem; background-color: white; color: #FF6F00; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">🛒 Sepet</button>
+      </div>
+    </div>
+  </header>
+  <nav>
+    <a href="#">Anasayfa</a>
+    <a href="#">Ürünler</a>
+    <a href="#">Kampanyalar</a>
+    <a href="#">İletişim</a>
+  </nav>
+
+  <section class="products">
+    <div class="product">
+      <img src="https://via.placeholder.com/250x150" alt="Ürün 1">
+      <h3>Akıllı Süpürge</h3>
+      <p>Otomatik temizlik, mobil uygulama desteği</p>
+      <strong>₺4.999</strong>
+      <button onclick="addToCart('Akıllı Süpürge', 4999)">Sepete Ekle</button>
+    </div>
+    <div class="product">
+      <img src="https://via.placeholder.com/250x150" alt="Ürün 2">
+      <h3>Akıllı Klima</h3>
+      <p>Uzaktan kontrol, enerji tasarrufu</p>
+      <strong>₺9.999</strong>
+      <button onclick="addToCart('Akıllı Klima', 9999)">Sepete Ekle</button>
+    </div>
+    <div class="product">
+      <img src="https://via.placeholder.com/250x150" alt="Ürün 3">
+      <h3>Akıllı Aydınlatma</h3>
+      <p>Renkli LED, zamanlayıcı ayarı</p>
+      <strong>₺799</strong>
+      <button onclick="addToCart('Akıllı Aydınlatma', 799)">Sepete Ekle</button>
+    </div>
+    <div class="product">
+      <img src="https://via.placeholder.com/250x150" alt="Ürün 4">
+      <h3>Akıllı Kamera</h3>
+      <p>Gece görüşlü güvenlik kamerası</p>
+      <strong>₺2.499</strong>
+      <button onclick="addToCart('Akıllı Kamera', 2499)">Sepete Ekle</button>
+    </div>
+    <div class="product">
+      <img src="https://via.placeholder.com/250x150" alt="Ürün 5">
+      <h3>Akıllı Priz</h3>
+      <p>Uzaktan aç/kapa, enerji ölçümü</p>
+      <strong>₺399</strong>
+      <button onclick="addToCart('Akıllı Priz', 399)">Sepete Ekle</button>
+    </div>
+  </section>
+
+  <section class="form-section" id="sepetPaneli" style="display: none;">
+    <h2>Sepet</h2>
+    <ul id="sepetListesi"></ul>
+    <p><strong>Toplam: ₺<span id="sepetToplam">0</span></strong></p>
+  </section>
+
+  <section class="form-section">
+    <h2>Kredi Başvuru Formu</h2>
+    <form onsubmit="krediBasvurusu(event)">
+      <div class="form-group">
+        <label for="ad">Ad Soyad:</label>
+        <input type="text" id="ad" required>
+      </div>
+      <div class="form-group">
+        <label for="tc">T.C. Kimlik No:</label>
+        <input type="text" id="tc" required>
+      </div>
+      <div class="form-group">
+        <label for="dogum">Doğum Tarihi:</label>
+        <input type="date" id="dogum" required>
+      </div>
+      <button type="submit">Başvur</button>
+    </form>
+  </section>
+
+  <section class="form-section" id="basvuruListesi" style="display: none;">
+    <h2>Gelen Kredi Başvuruları</h2>
+    <ul id="basvurular"></ul>
+  </section>
+  <!-- ... unchanged HTML omitted for brevity ... -->
+
+  <script>
+    const users = []; // kullanıcı adı ve şifreleri burada tutulur (demo amaçlı)
+    function krediBasvurusu(event) {
+      event.preventDefault();
+      const ad = document.getElementById('ad').value;
+      const tc = document.getElementById('tc').value;
+      const dogum = document.getElementById('dogum').value;
+
+      const basvuru = { ad, tc, dogum };
+      const liste = document.getElementById('basvurular');
+
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <strong>${ad}</strong> - T.C: ${tc} - Doğum: ${dogum}<br>
+        Limit Belirle: <input type="number" placeholder="₺" style="width:100px;"> 
+        <button onclick="this.previousElementSibling.disabled = true; this.disabled = true; alert('Limit uygulandı.')">Uygula</button>
+      `;
+
+      liste.appendChild(li);
+      document.getElementById('basvuruListesi').style.display = 'block';
+
+      const sonucMesaji = `Sayın ${ad}, başvurunuz alınmıştır. Yetkili onayı bekleniyor.`;
+      alert(sonucMesaji);
+    }
+      function registerUser(event) {
+      event.preventDefault();
+      const inputs = event.target.querySelectorAll('input');
+      const username = inputs[0].value.trim();
+      const password = inputs[1].value.trim();
+
+      if (users.find(u => u.username === username)) {
+        alert('Bu kullanıcı adı zaten kayıtlı.');
+        return false;
+      }
+      users.push({ username, password });
+      alert('Üyelik başarılı! Giriş yapabilirsiniz.');
+      event.target.reset();
+      return false;
+    }
+
+    function loginUser(event) {
+      event.preventDefault();
+      const inputs = event.target.querySelectorAll('input');
+      const username = inputs[0].value.trim();
+      const password = inputs[1].value.trim();
+
+      const user = users.find(u => u.username === username && u.password === password);
+      if (user) {
+        alert('Giriş başarılı!');
+      } else {
+        alert('Hatalı kullanıcı adı veya şifre.');
+      }
+      return false;
+    }
+      function addToCart(name, price) {
+      const sepetListesi = document.getElementById('sepetListesi');
+      const yeniEleman = document.createElement('li');
+      yeniEleman.textContent = `${name} - ₺${price.toLocaleString('tr-TR')}`;
+      sepetListesi.appendChild(yeniEleman);
+
+      const toplamSpan = document.getElementById('sepetToplam');
+      let mevcutToplam = parseInt(toplamSpan.textContent.replaceAll('.', ''));
+      mevcutToplam += price;
+      toplamSpan.textContent = mevcutToplam.toLocaleString('tr-TR');
+
+      document.getElementById('sepetPaneli').style.display = 'block';
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle('night-mode');
+    }
+  </script>
+  <footer>
+    <p style="font-weight: bold;">Senetle Satış · Kredi Kartı · Kredi ile Alışveriş</p>
+    <p>İletişim: 0 (555) 123 45 67 | info@nexvivo.com</p>
+    <div style="margin-top: 2rem; background: #fff; padding: 2rem; text-align: center;">
+    <h3 style="margin-bottom: 1rem; color: #333;">Çalıştığımız Bankalar</h3>
+    <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 2rem; overflow-x: auto; padding: 1rem;">
+      <a href="https://www.ziraatbank.com.tr" target="_blank" style="text-align: center; min-width: 100px; text-decoration: none; color: inherit;">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Ziraat_Bank_logo.png" alt="Ziraat Bankası" style="height: 50px; display: block; margin: 0 auto 0.5rem;">
+  <small style="color: #444; font-size: 0.8rem;">Ziraat Bankası</small>
+</a>
+      <a href="https://www.vakifbank.com.tr" target="_blank" style="text-align: center; min-width: 100px; text-decoration: none; color: inherit;">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/d/da/Vak%C4%B1fBank_logo_2021.png" alt="VakıfBank" style="height: 50px; display: block; margin: 0 auto 0.5rem;">
+  <small style="color: #444; font-size: 0.8rem;">VakıfBank</small>
+</a>
+      <a href="https://www.halkbank.com.tr" target="_blank" style="text-align: center; min-width: 100px; text-decoration: none; color: inherit;">
+  <img src="https://upload.wikimedia.org/wikipedia/tr/0/0b/Halkbank_logo_yeni.png" alt="Halkbank" style="height: 50px; display: block; margin: 0 auto 0.5rem;">
+  <small style="color: #444; font-size: 0.8rem;">Halkbank</small>
+</a>
+      <a href="https://www.qnbfinansbank.com" target="_blank" style="text-align: center; min-width: 100px; text-decoration: none; color: inherit;">
+  <img src="https://upload.wikimedia.org/wikipedia/en/thumb/6/6f/QNB_Finansbank_logo.svg/512px-QNB_Finansbank_logo.svg.png" alt="QNB Finansbank" style="height: 50px; display: block; margin: 0 auto 0.5rem;">
+  <small style="color: #444; font-size: 0.8rem;">QNB Finansbank</small>
+</a>
+      <a href="https://www.isbank.com.tr" target="_blank" style="text-align: center; min-width: 100px; text-decoration: none; color: inherit;">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/T%C3%BCrkiye_%C4%B0%C5%9F_Bankas%C4%B1_logo.svg/320px-T%C3%BCrkiye_%C4%B0%C5%9F_Bankas%C4%B1_logo.svg.png" alt="İş Bankası" style="height: 50px; display: block; margin: 0 auto 0.5rem;">
+  <small style="color: #444; font-size: 0.8rem;">İş Bankası</small>
+</a>
+    </div>
+  </div>
+
+  <div style="margin-top: 2rem; background: #f4f4f4; padding: 2rem; text-align: center; border-radius: 8px;">
+    <h3 style="color: #FF6F00; margin-bottom: 1rem;">Bankalara Özel Kampanyalar</h3>
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem;">
+      <div style="background: white; padding: 1rem; border-radius: 8px; width: 280px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <h4>Ziraat Bankası</h4>
+        <p>3 Ay Ertelemeli, 12 Ay Taksit İmkanı</p>
+      </div>
+      <div style="background: white; padding: 1rem; border-radius: 8px; width: 280px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <h4>VakıfBank</h4>
+        <p>%0 Faizli 6 Taksitli Alışveriş Fırsatı</p>
+      </div>
+      <div style="background: white; padding: 1rem; border-radius: 8px; width: 280px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <h4>QNB Finansbank</h4>
+        <p>150.000 TL'ye Kadar Onaylı Limitler</p>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
